@@ -106,7 +106,7 @@ Uses **Ollama-based local inference**
 ### 🔥 Pull Model
 
 ```bash
-ollama pull phi3:mini
+ollama pull llama3.2:latest
 ```
 
 ---
