@@ -1,61 +1,50 @@
-# 🫀 CAD Pipeline
+# 🫀 AI4CAD — AI-Powered Coronary Artery Disease Detection & Clinical Decision Support
 
-## 🚀 Overview
+AI4CAD is an end-to-end agentic AI system designed to assist in the detection and clinical interpretation of coronary artery disease (CAD) using angiography data.
 
-This project implements an **end-to-end pipeline for coronary artery analysis** using angiography data.
-
-The system processes **DICOM video inputs**, performs automated analysis, and generates a **structured medical-style report**.
-
-The focus of this repository is on:
-
-* Data flow and system design
-* Real-world DICOM handling
-* Explainability and evaluation
-* Automated reporting
-
-> ⚠️ Note: Model internals are intentionally abstracted.
+The system integrates **deep learning, explainability, and medical reasoning** into a unified pipeline to support faster and more accessible diagnosis.
 
 ---
 
-## 🧠 Pipeline Flow
-
-```
-DICOM Input
-   ↓
-Frame Extraction
-   ↓
-Detection Engine
-   ↓
-Aggregation / Ensemble
-   ↓
-Explainability Engine
-   ↓
-Evaluation Metrics
-   ↓
-Final Report Generation
-```
-
----
-
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```
 project/
 │
-├── input/
-│   └── dicom/                  # Place DICOM files here
+├── data/
+│   ├── input/
+│   │   └── dicom/                  # Place DICOM files here
+│   │
+│   └── output/
+│       └── patient_x/
+│           ├── frames/             # Extracted frames
+│           ├── detections/         # YOLO detections (with boxes)
+│           ├── gradcam/            # Explainability heatmaps
+│           ├── merged/             # Side-by-side detection + GradCAM
+│           ├── final/              # Final reports
 │
-├── output/
-│   └── final/
-│       └── final_report/       # Generated reports
+├── models/
+│   └── best.pt                    # Trained YOLO model
 │
-├── src/
-│   ├── dicom/                  # DICOM processing
-│   ├── detection/              # Detection pipeline
-│   ├── explainability/         # CAM methods
-│   ├── evaluation/             # Metrics
-│   ├── reporting/              # Report generation
+├── graph/
+│   ├── builder.py                # LangGraph pipeline
+│   ├── state.py                  # State definition
 │
+├── nodes/
+│   ├── preprocess.py             # DICOM → frames
+│   ├── detection.py              # YOLO inference
+│   ├── gradcam.py                # Explainability
+│   ├── merge_node.py             # Merge detection + GradCAM
+│   ├── context.py                # Context generation
+│   ├── reasoning.py              # LLM reasoning
+│   ├── policy.py                 # Routing logic
+│   ├── doctor.py                 # Human-in-loop nodes
+│   ├── report.py                 # PDF report generation
+│
+├── llm/
+│   └── medgemma.py               # Adaptive LLM (GPU/CPU)
+│
+├── config.py
 ├── main.py
 ├── requirements.txt
 └── README.md
@@ -63,19 +52,24 @@ project/
 
 ---
 
-## ⚙️ Setup Instructions
+# ⚙️ Setup Instructions
 
-### 🔹 Step 1: Create Virtual Environment
+## 🔹 Step 1: Create Virtual Environment
 
 ```bash
 python -m venv venv
-source venv/bin/activate        # Linux/Mac
-venv\Scripts\activate           # Windows
+```
+
+Activate:
+
+```bash
+venv\Scripts\activate       # Windows
+source venv/bin/activate    # Linux/Mac
 ```
 
 ---
 
-### 🔹 Step 2: Install Dependencies
+## 🔹 Step 2: Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -83,35 +77,49 @@ pip install -r requirements.txt
 
 ---
 
-## 💻 Runtime Configuration
+# 💻 Runtime Configuration
 
-The pipeline automatically adapts based on your system:
-
-### 🟢 GPU Available
-
-* Uses optimized inference pipeline
-* Enables high-performance execution
-* Supports advanced model backends
+The system automatically adapts based on your hardware:
 
 ---
 
-### 🟡 CPU Only
+## 🟢 GPU Available
 
-Uses local inference via Ollama
+* Uses **MedGemma (Google medical LLM)**
+* High-quality medical reasoning
+* Faster inference with CUDA
 
-#### Install Ollama:
+---
 
-[https://ollama.com](https://ollama.com)
+## 🟡 CPU Only
 
-#### Pull a model:
+Uses **Ollama-based local inference**
+
+---
+
+### 🔥 Install Ollama
+
+👉 https://ollama.com
+
+---
+
+### 🔥 Pull Model
 
 ```bash
-ollama pull llama3
+ollama pull phi3:mini
 ```
 
 ---
 
-## ▶️ Running the Pipeline
+### 🔥 Start Ollama
+
+```bash
+ollama serve
+```
+
+---
+
+# ▶️ Running the Pipeline
 
 Once setup is complete:
 
@@ -121,122 +129,208 @@ python main.py
 
 ---
 
-## 📥 Input Data
+# 📥 Input Data
 
-Place your DICOM files here:
+Place DICOM files here:
 
 ```
-input/dicom/
+data/input/dicom/
 ```
 
 ---
 
-### 🔁 Using Your Own Data
+## 🔁 Using Your Own Data
 
 To use custom data:
 
-* Replace existing DICOM files in the folder
-* Ensure files are **multi-frame DICOM videos**
+* Replace files in `data/input/dicom/`
+* Ensure they are **multi-frame angiography DICOM videos**
+* Supported format:
+
+  * IM0.dcm
+  * IM1.dcm
+  * IM2.dcm
 
 ---
 
-## 📤 Output
-
-After execution, results will be available at:
+# 🔄 Pipeline Overview
 
 ```
-output/final/final_report/
+DICOM Input
+   ↓
+Frame Extraction
+   ↓
+YOLO Detection
+   ↓
+GradCAM Explainability
+   ↓
+Merge (Detection | GradCAM)
+   ↓
+Context Generation
+   ↓
+LLM Reasoning (MedGemma / Ollama)
+   ↓
+Doctor Validation
+   ↓
+Final Report
 ```
 
 ---
 
-## 📄 Final Report Includes
+# 📤 Output
 
-* Detected regions of interest
-* Severity grouping (low / medium / high)
-* Visual overlays
-* Explainability heatmaps
-* Structured interpretation
+After execution:
+
+```
+data/output/patient_x/
+```
 
 ---
 
-## 🧠 Explainability
+## 📁 Key Outputs
 
-The pipeline includes multiple explainability methods:
+---
 
-* Grad-based localization
-* Layer-wise attribution
-* Score-based attention mapping
+### 🖼 Frames
+
+```
+frames/
+```
+
+Extracted angiography frames
+
+---
+
+### 📦 Detection
+
+```
+detections/
+```
+
+Frames with bounding boxes
+
+---
+
+### 🔥 GradCAM
+
+```
+gradcam/
+```
+
+Explainability heatmaps
+
+---
+
+### 🧠 Merged Evidence
+
+```
+merged/
+```
+
+Side-by-side:
+
+```
+[ Detection (boxes) ] | [ GradCAM ]
+```
+
+---
+
+### 📄 Final Report
+
+```
+final/final_report.pdf
+```
+
+---
+
+# 📄 Final Report Includes
+
+* AI-based diagnosis
+* Severity classification
+* Reasoning explanation
+* Doctor validation
+* Visual evidence (merged frames)
+
+---
+
+# 🧠 Explainability
+
+The system integrates explainability through:
+
+* GradCAM heatmaps
 * Detection-aware visualization
-
-These are evaluated using:
-
-* Spatial overlap metrics
-* Peak localization checks
-* Energy distribution analysis
+* Frame-level importance ranking
 
 ---
 
-## 📊 Evaluation
-
-The system evaluates both:
-
-### Detection Performance
-
-* Precision
-* Recall
-* F1-score
-* mAP
+# 🤖 AI Components
 
 ---
 
-### Explainability Quality
+## 🔍 Detection Model
 
-* IoU (Intersection over Union)
-* Pointing Game Accuracy
-* Energy Localization Score
+* YOLO-based architecture
+* Trained on CADICA / Arcade datasets
+* Outputs:
 
----
-
-## 🔧 Design Philosophy
-
-This repository is built to:
-
-* Simulate real-world medical workflows
-* Support modular experimentation
-* Enable explainable AI research
-* Maintain abstraction over sensitive components
+  * blockage presence
+  * confidence scores
 
 ---
 
-## 🚀 Key Highlights
+## 🔥 Explainability
 
-* End-to-end automated pipeline
+* GradCAM applied to detection backbone
+* Highlights model attention regions
+
+---
+
+## 🧠 Reasoning Layer
+
+Adaptive LLM:
+
+| Environment | Model         |
+| ----------- | ------------- |
+| GPU         | MedGemma      |
+| CPU         | Ollama (phi3) |
+
+---
+
+## 👨‍⚕️ Human-in-the-Loop
+
+* Junior doctor validation
+* Senior escalation logic
+* Feedback integration
+
+---
+
+# 🚀 Key Highlights
+
+* End-to-end agentic pipeline (LangGraph)
 * DICOM-native processing
-* Explainability-focused design
-* Hardware-adaptive execution
-* Structured output generation
+* Explainable AI for clinical trust
+* Adaptive inference (GPU + CPU)
+* Multi-view angiography support
+* Structured report generation
 
 ---
 
-## ⚠️ Disclaimer
+# ⚠️ Disclaimer
 
-* This system is intended for **research and development purposes only**
-* Not for clinical use without validation
-
----
-
-## 👨‍💻 Author
-
-Himanshu
+* For **research and development only**
+* Not intended for clinical deployment without validation
 
 ---
 
-## ⭐ Support
+# 👨‍💻 Author
+
+**Himanshu**
+
+---
+
+# ⭐ Support
 
 If you find this useful:
 
 * Star the repository ⭐
-* Share with others in medical AI
-
----
+* Share with medical AI community
