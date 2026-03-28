@@ -1,4 +1,4 @@
-# 🫀 AI4CAD — AI-Powered Coronary Artery Disease Detection & Clinical Decision Support
+# AI4CAD — AI-Powered Coronary Artery Disease Detection & Clinical Decision Support
 
 AI4CAD is an end-to-end agentic AI system designed to assist in the detection and clinical interpretation of coronary artery disease (CAD) using angiography data.
 
@@ -6,7 +6,7 @@ The system integrates **deep learning, explainability, and medical reasoning** i
 
 ---
 
-# 📂 Project Structure
+# Project Structure
 
 ```
 project/
@@ -52,9 +52,9 @@ project/
 
 ---
 
-# ⚙️ Setup Instructions
+# Setup Instructions
 
-## 🔹 Step 1: Create Virtual Environment
+##  Step 1: Create Virtual Environment
 
 ```bash
 python -m venv venv
@@ -69,7 +69,7 @@ source venv/bin/activate    # Linux/Mac
 
 ---
 
-## 🔹 Step 2: Install Dependencies
+##  Step 2: Install Dependencies
 
 ```bash
 pip install -r requirements.txt
@@ -77,13 +77,13 @@ pip install -r requirements.txt
 
 ---
 
-# 💻 Runtime Configuration
+#  Runtime Configuration
 
 The system automatically adapts based on your hardware:
 
 ---
 
-## 🟢 GPU Available
+##  GPU Available
 
 * Uses **MedGemma (Google medical LLM)**
 * High-quality medical reasoning
@@ -91,19 +91,19 @@ The system automatically adapts based on your hardware:
 
 ---
 
-## 🟡 CPU Only
+##  CPU Only
 
 Uses **Ollama-based local inference**
 
 ---
 
-### 🔥 Install Ollama
+###  Install Ollama
 
 👉 https://ollama.com
 
 ---
 
-### 🔥 Pull Model
+###  Pull Model
 
 ```bash
 ollama pull llama3.2:latest
@@ -111,7 +111,7 @@ ollama pull llama3.2:latest
 
 ---
 
-### 🔥 Start Ollama
+###  Start Ollama
 
 ```bash
 ollama serve
@@ -119,7 +119,7 @@ ollama serve
 
 ---
 
-# ▶️ Running the Pipeline
+#  Running the Pipeline
 
 Once setup is complete:
 
@@ -129,7 +129,7 @@ python main.py
 
 ---
 
-# 📥 Input Data
+#  Input Data
 
 Place DICOM files here:
 
@@ -139,7 +139,7 @@ data/input/dicom/
 
 ---
 
-## 🔁 Using Your Own Data
+##  Using Your Own Data
 
 To use custom data:
 
@@ -153,7 +153,7 @@ To use custom data:
 
 ---
 
-# 🔄 Pipeline Overview
+#  Pipeline Overview
 
 ```
 DICOM Input
@@ -177,7 +177,7 @@ Final Report
 
 ---
 
-# 📤 Output
+#  Output
 
 After execution:
 
@@ -187,11 +187,11 @@ data/output/patient_x/
 
 ---
 
-## 📁 Key Outputs
+##  Key Outputs
 
 ---
 
-### 🖼 Frames
+###  Frames
 
 ```
 frames/
@@ -201,7 +201,7 @@ Extracted angiography frames
 
 ---
 
-### 📦 Detection
+###  Detection
 
 ```
 detections/
@@ -211,7 +211,7 @@ Frames with bounding boxes
 
 ---
 
-### 🔥 GradCAM
+###  GradCAM
 
 ```
 gradcam/
@@ -221,7 +221,7 @@ Explainability heatmaps
 
 ---
 
-### 🧠 Merged Evidence
+###  Merged Evidence
 
 ```
 merged/
@@ -235,7 +235,7 @@ Side-by-side:
 
 ---
 
-### 📄 Final Report
+###  Final Report
 
 ```
 final/final_report.pdf
@@ -243,7 +243,7 @@ final/final_report.pdf
 
 ---
 
-# 📄 Final Report Includes
+#  Final Report Includes
 
 * AI-based diagnosis
 * Severity classification
@@ -253,7 +253,7 @@ final/final_report.pdf
 
 ---
 
-# 🧠 Explainability
+#  Explainability
 
 The system integrates explainability through:
 
@@ -263,11 +263,11 @@ The system integrates explainability through:
 
 ---
 
-# 🤖 AI Components
+#  AI Components
 
 ---
 
-## 🔍 Detection Model
+##  Detection Model
 
 * YOLO-based architecture
 * Trained on CADICA / Arcade datasets
@@ -278,25 +278,25 @@ The system integrates explainability through:
 
 ---
 
-## 🔥 Explainability
+##  Explainability
 
 * GradCAM applied to detection backbone
 * Highlights model attention regions
 
 ---
 
-## 🧠 Reasoning Layer
+##  Reasoning Layer
 
 Adaptive LLM:
 
-| Environment | Model         |
-| ----------- | ------------- |
-| GPU         | MedGemma      |
-| CPU         | Ollama (phi3) |
+| Environment | Model             |
+| ----------- | -------------     |
+| GPU         | MedGemma          | 
+| CPU         | Ollama (llama3.2) |
 
 ---
 
-## 👨‍⚕️ Human-in-the-Loop
+##  Human-in-the-Loop
 
 * Junior doctor validation
 * Senior escalation logic
@@ -304,7 +304,7 @@ Adaptive LLM:
 
 ---
 
-# 🚀 Key Highlights
+#  Key Highlights
 
 * End-to-end agentic pipeline (LangGraph)
 * DICOM-native processing
@@ -315,14 +315,14 @@ Adaptive LLM:
 
 ---
 
-# ⚠️ Disclaimer
+#  Disclaimer
 
 * For **research and development only**
 * Not intended for clinical deployment without validation
 
 ---
 
-# 👨‍💻 Author
+# Author
 
 **Himanshu**
 
